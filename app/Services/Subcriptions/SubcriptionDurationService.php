@@ -32,8 +32,10 @@ class SubcriptionDurationService
 
     public function create(array $data)
     {
-        $data['organization_id'] = $this->organizationId;
-        $subcriptionDuration = SubcriptionDuration::create($data);
+        $subcriptionDuration = new SubcriptionDuration($data);
+        $subcriptionDuration->organization_id = $this->organizationId;
+
+        $subcriptionDuration->save();
 
         return $subcriptionDuration;
     }

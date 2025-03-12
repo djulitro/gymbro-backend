@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Subcription;
+namespace App\Http\Requests\Payment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SubcriptionDurationUpdateRequest extends FormRequest
+class PaymentUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,10 @@ class SubcriptionDurationUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|required|string',
-            'description' => 'sometimes|required|string',
-            'day_durations' => 'sometimes|required|integer',
+            'user_id' => 'sometimes|required|integer',
+            'subcription_id' => 'sometimes|required|integer',
+            'start_date' => 'sometimes|required|date',
+            'end_date' => 'sometimes|required|date',
         ];
     }
 }
