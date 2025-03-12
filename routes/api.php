@@ -3,6 +3,7 @@
 use App\Constants\UserTypeConst;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PunchController;
 use App\Http\Controllers\SubcriptionController;
 use App\Http\Controllers\SubcriptionDurationController;
 use App\Http\Middleware\RoleMiddleware;
@@ -47,4 +48,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('payments/{id}', [PaymentController::class, 'update']);
         Route::delete('payments/{id}', [PaymentController::class, 'delete']);
     });
+
+    // Punch routes
+    Route::middleware('role:'.UserTypeConst::SUPER_ADMIN.','.UserTypeConst::ADMIN)->group(function () {
+        Route::get('punches', [PunchController::class, 'getAll']);
+        Route::get('punches/{id}', [PunchController::class, 'getById']);
+        Route::put('punches/{id}', [PunchController::class, 'confirmAdmin']);
+    });
+
+    Route::post('punches', [PunchController::class, 'create'])->middleware('role:'.UserTypeConst::CLIENT.','.UserTypeConst::SUPER_ADMIN.','.UserTypeConst::ADMIN);
 });
