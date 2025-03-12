@@ -4,6 +4,8 @@ namespace App\Services\Subcriptions;
 
 use App\Models\Organization;
 use App\Models\Subcription;
+use App\Models\Payment;
+use Carbon\Carbon;
 
 class SubcriptionService
 {
@@ -28,6 +30,20 @@ class SubcriptionService
         $subcription = Subcription::with('subcriptionDuration')
         ->where('organization_id', $this->organizationId)
         ->find($id);
+
+        return $subcription;
+    }
+
+    public function getActiveSubcription(int $userId)
+    {
+        $now = Carbon::now()->format('Y-m-d');
+
+        $subcription = Payment::with('subcription')
+        ->where('organization_id', $this->organizationId)
+        ->where('user_id', $userId)
+        ->where('start_date', '<=', $now)
+        ->where('end_date', '>=', $now)
+        ->first();
 
         return $subcription;
     }
