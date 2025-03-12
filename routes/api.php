@@ -2,6 +2,7 @@
 
 use App\Constants\UserTypeConst;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SubcriptionController;
 use App\Http\Controllers\SubcriptionDurationController;
 use App\Http\Middleware\RoleMiddleware;
@@ -35,5 +36,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('subcriptions', [SubcriptionController::class, 'create']);
         Route::put('subcriptions/{id}', [SubcriptionController::class, 'update']);
         Route::delete('subcriptions/{id}', [SubcriptionController::class, 'delete']);
+    });
+
+    // Payment routes
+    Route::middleware('role:'.UserTypeConst::SUPER_ADMIN.','.UserTypeConst::ADMIN)->group(function () {
+        Route::get('payments', [PaymentController::class, 'getAll']);
+        Route::get('payments/{id}', [PaymentController::class, 'getById']);
+        Route::get('payments/{startDate}/{endDate}', [PaymentController::class, 'getByDates']);
+        Route::post('payments', [PaymentController::class, 'create']);
+        Route::put('payments/{id}', [PaymentController::class, 'update']);
+        Route::delete('payments/{id}', [PaymentController::class, 'delete']);
     });
 });

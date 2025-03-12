@@ -23,7 +23,7 @@ class UserSuperAdminSeeder extends Seeder
         $user->email = 'superadmin@admin.cl';
         $user->password = Hash::make('Admin2025.,');
         $user->phone = '12345678';
-        $user->address = 'Calle Falsa 123';
+        $user->direction = 'Calle Falsa 123';
         $user->user_type_id = UserTypeConst::SUPER_ADMIN;
 
         $user->save();

@@ -4,23 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Subcription\SubcriptionDurationCreateRequest;
 use App\Http\Requests\Subcription\SubcriptionDurationUpdateRequest;
+use App\Models\Organization;
 use App\Services\Subcriptions\SubcriptionDurationService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class SubcriptionDurationController extends Controller
 {
-    private SubcriptionDurationService $subcriptionDurationService;
+    private Organization $organization;
 
     public function __construct()
     {
-        $organization = Auth::user()->organization;
-        $this->subcriptionDurationService = new SubcriptionDurationService($organization);
+        $this->organization = Auth::user()->organization;
     }
 
     public function getAll()
     {
-        $subcriptionDurations = $this->subcriptionDurationService->getAll();
+        $subcriptionDurationService = new SubcriptionDurationService($this->organization);
+
+        $subcriptionDurations = $subcriptionDurationService->getAll();
 
         return response()->json([
             'message' => 'Duraciones de subcripciones encontradas.',
@@ -30,7 +31,9 @@ class SubcriptionDurationController extends Controller
 
     public function getById(int $id)
     {
-        $subcriptionDuration = $this->subcriptionDurationService->getById($id);
+        $subcriptionDurationService = new SubcriptionDurationService($this->organization);
+
+        $subcriptionDuration = $subcriptionDurationService->getById($id);
 
         return response()->json([
             'message' => 'Duración de subcripción encontrada.',
@@ -40,7 +43,9 @@ class SubcriptionDurationController extends Controller
 
     public function create(SubcriptionDurationCreateRequest $request)
     {
-        $subcriptionDuration = $this->subcriptionDurationService->create($request->safe()->all());
+        $subcriptionDurationService = new SubcriptionDurationService($this->organization);
+
+        $subcriptionDuration = $subcriptionDurationService->create($request->safe()->all());
 
         return response()->json([
             'message' => 'Duración de subcripción creada.',
@@ -50,7 +55,9 @@ class SubcriptionDurationController extends Controller
 
     public function update(SubcriptionDurationUpdateRequest $request, int $id)
     {
-        $subcriptionDuration = $this->subcriptionDurationService->update($id, $request->safe()->all());
+        $subcriptionDurationService = new SubcriptionDurationService($this->organization);
+
+        $subcriptionDuration = $subcriptionDurationService->update($id, $request->safe()->all());
 
         if (!$subcriptionDuration) {
             return response()->json([
@@ -66,7 +73,9 @@ class SubcriptionDurationController extends Controller
 
     public function delete(int $id)
     {
-        $subcriptionDuration = $this->subcriptionDurationService->delete($id);
+        $subcriptionDurationService = new SubcriptionDurationService($this->organization);
+
+        $subcriptionDuration = $subcriptionDurationService->delete($id);
 
         if (!$subcriptionDuration) {
             return response()->json([
